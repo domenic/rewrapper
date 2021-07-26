@@ -10,6 +10,7 @@ updateOutput();
 
 function updateOutput() {
   output.value = rewrap(input.value, columnLength.valueAsNumber);
+  document.documentElement.style.setProperty("--column-length", columnLength);
 }
 
 function rewrap(text, columnLength) {
