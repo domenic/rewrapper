@@ -1,29 +1,32 @@
 export default function (text, columnLength) {
   const lines = text.split("\n");
-  const unwrapped = unwrapNonStandaloneLines(lines);
+  const unwrapped = smooshOverwrappedLines(lines);
   const rewrapped = wrapLines(unwrapped, columnLength);
   return rewrapped.join("\n");
 }
 
-function unwrapNonStandaloneLines(lines) {
-  const unwrappedLines = [];
+function smooshOverwrappedLines(lines) {
+  const smooshedLines = [];
 
   let lastLineIsSmushable = false;
   for (const line of lines) {
-    if (shouldStandalone(line)) {
-      unwrappedLines.push(line);
+    const trimmedLine = line.trim();
+
+    if (isStandaloneLine(trimmedLine)) {
+      smooshedLines.push(line);
       lastLineIsSmushable = false;
     } else {
       if (lastLineIsSmushable) {
-        unwrappedLines[unwrappedLines.length - 1] += " " + line.trim();
+        smooshedLines[smooshedLines.length - 1] += " " + trimmedLine;
       } else {
-        unwrappedLines.push(line.trimRight());
+        smooshedLines.push(line.trimRight());
       }
-      lastLineIsSmushable = true;
+
+      lastLineIsSmushable = !mustBreakAfter(trimmedLine);
     }
   }
 
-  return unwrappedLines;
+  return smooshedLines;
 }
 
 function wrapLines(lines, columnLength) {
@@ -59,19 +62,18 @@ function wrapLine(line, columnLength) {
   return brokenLines;
 }
 
-function shouldStandalone(line) {
-  const trimmed = line.trim();
-
-  return trimmed.length === 0 ||
-         /^<\/?[a-z- "=]+>$/i.test(trimmed) ||
-         /^<!--.*?-->$/i.test(trimmed) ||
-         !shouldRewrap(line);
-}
-
 function shouldRewrap(line) {
   const trimmed = line.trim();
 
   return !/^<dt(?:[a-z- "=]+)?>.*<\/dt>/.test(trimmed);
+}
+
+function mustBreakAfter(trimmedLine) {
+  return trimmedLine.endsWith("</dt>");
+}
+
+function isStandaloneLine(trimmedLine) {
+  return /^<\/?[a-z- "=]+>$/i.test(trimmedLine) || trimmedLine.length === 0;
 }
 
 function getLeadingIndent(line) {
