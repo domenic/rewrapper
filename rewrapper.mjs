@@ -29,7 +29,7 @@ function unwrapNonStandaloneLines(lines) {
 function wrapLines(lines, columnLength) {
   const linesRewrapped = [];
   for (const line of lines) {
-    if (line.length <= columnLength) {
+    if (line.length <= columnLength || !shouldRewrap(line)) {
       linesRewrapped.push(line);
     } else {
       linesRewrapped.push(...wrapLine(line, columnLength));
@@ -62,7 +62,16 @@ function wrapLine(line, columnLength) {
 function shouldStandalone(line) {
   const trimmed = line.trim();
 
-  return trimmed.length === 0 || /^<\/?[a-z- "=]+>$/i.test(trimmed) || /^<!--.*?-->$/i.test(trimmed);
+  return trimmed.length === 0 ||
+         /^<\/?[a-z- "=]+>$/i.test(trimmed) ||
+         /^<!--.*?-->$/i.test(trimmed) ||
+         !shouldRewrap(line);
+}
+
+function shouldRewrap(line) {
+  const trimmed = line.trim();
+
+  return !/^<dt(?:[a-z- "=]+)?>.*<\/dt>/.test(trimmed);
 }
 
 function getLeadingIndent(line) {
