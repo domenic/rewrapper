@@ -76,7 +76,7 @@ function wrapLine(line, columnLength) {
 function shouldStandalone(line) {
   const trimmed = line.trim();
 
-  return trimmed.length === 0 || /^<\/?[a-z-]+>$/i.test(trimmed) || /^<!--.*?-->$/i.test(trimmed);
+  return trimmed.length === 0 || /^<\/?[a-z- "=]+>$/i.test(trimmed) || /^<!--.*?-->$/i.test(trimmed);
 }
 
 function getLeadingIndent(line) {
