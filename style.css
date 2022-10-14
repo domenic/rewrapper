@@ -1,42 +1,13 @@
-* {
-  box-sizing: border-box;
-}
-
 label {
   display: block;
   margin: 16px 0;
 }
 
-.wrapper {
-  position: relative;
-  width: 80%;
-  overflow: hidden;
-}
-
 textarea {
-  white-space: pre;
-  font-family: monospace;
-  padding: 2px;
-  max-width: 100%;
-}
-
-textarea:not(.ruler-displayer) {
   display: block;
-  width: 100%;
+  width: 80%;
   height: 300px;
-}
-
-.ruler-displayer {
-  border: none;
-  border-right: 1px solid lightblue;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  height: 100%;
-  pointer-events: none;
-  background: transparent;
-  resize: none;
-  width: calc(var(--column-length) * 1ch + 3px);
+  white-space: pre;
 }
 
 .github-corner:hover .octo-arm {
