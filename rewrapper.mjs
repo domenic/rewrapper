@@ -44,15 +44,17 @@ function wrapLines(lines, columnLength) {
 
 function wrapLine(line, columnLength) {
   const leadingIndent = getLeadingIndent(line, columnLength);
+  line = line.trimLeft();
 
   const brokenLines = [];
-  let currentLine = "";
+  let currentLine = leadingIndent;
   let spaceBefore = "";
   for (const word of line.split(" ")) {
     if (currentLine.length + spaceBefore.length + word.length < columnLength) {
       currentLine += spaceBefore + word;
     } else {
-      brokenLines.push(currentLine);
+      if (currentLine != leadingIndent)
+        brokenLines.push(currentLine);
       currentLine = leadingIndent + word;
     }
     spaceBefore = " ";
