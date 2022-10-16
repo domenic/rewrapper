@@ -53,7 +53,7 @@ function wrapLine(line, columnLength) {
     if (currentLine.length + spaceBefore.length + word.length < columnLength) {
       currentLine += spaceBefore + word;
     } else {
-      if (currentLine != leadingIndent)
+      if (currentLine !== leadingIndent)
         brokenLines.push(currentLine);
       currentLine = leadingIndent + word;
     }
