@@ -16,7 +16,7 @@ function smooshOverwrappedLines(lines) {
       smooshedLines.push(line);
       lastLineIsSmushable = false;
     } else {
-      if (lastLineIsSmushable) {
+      if (lastLineIsSmushable && !mustBreakBefore(trimmedLine)) {
         smooshedLines[smooshedLines.length - 1] += " " + trimmedLine;
       } else {
         smooshedLines.push(line.trimRight());
@@ -65,17 +65,23 @@ function wrapLine(line, columnLength) {
 }
 
 function shouldRewrap(line) {
-  const trimmed = line.trim();
+  const trimmedLine = line.trim();
 
-  return !/^<dt(?:[a-z- "=]+)?>.*<\/dt>/.test(trimmed);
+  return !/^<(dt|th|td)(?:[a-z- "=]+)?>/.test(trimmedLine);
 }
 
 function mustBreakAfter(trimmedLine) {
-  return trimmedLine.endsWith("</dt>");
+  return trimmedLine.endsWith("</dt>") || trimmedLine.endsWith("</li>");
+}
+
+function mustBreakBefore(trimmedLine) {
+  return trimmedLine.startsWith("<td") || trimmedLine.startsWith("<th");
 }
 
 function isStandaloneLine(trimmedLine) {
-  return /^<\/?[a-z- "=]+>$/i.test(trimmedLine) || trimmedLine.length === 0;
+  return trimmedLine.length === 0 ||
+         /^<\/?[a-z- "=]+>$/i.test(trimmedLine) ||
+         /^<!--.*-->$/.test(trimmedLine);
 }
 
 function getLeadingIndent(line) {
