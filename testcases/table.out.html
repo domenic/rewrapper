@@ -1,0 +1,32 @@
+   <table>
+    <tr>
+     <th><var>A</var>
+     <th><var>B</var>
+     <th><span>same origin</span>
+     <th><span>same origin-domain</span>
+    <tr>
+     <td>("<code data-x="">https</code>", "<code data-x="">example.org</code>", null, null)
+     <td>("<code data-x="">https</code>", "<code data-x="">example.org</code>", null, null)
+     <td>✅
+     <td>✅
+    <tr>
+     <td>("<code data-x="">https</code>", "<code data-x="">example.org</code>", 314, null)
+     <td>("<code data-x="">https</code>", "<code data-x="">example.org</code>", 420, null)
+     <td>❌
+     <td>❌
+    <tr>
+     <td>("<code data-x="">https</code>", "<code data-x="">example.org</code>", 314, "<code data-x="">example.org</code>")
+     <td>("<code data-x="">https</code>", "<code data-x="">example.org</code>", 420, "<code data-x="">example.org</code>")
+     <td>❌
+     <td>✅
+    <tr>
+     <td>("<code data-x="">https</code>", "<code data-x="">example.org</code>", null, null)
+     <td>("<code data-x="">https</code>", "<code data-x="">example.org</code>", null, "<code data-x="">example.org</code>")
+     <td>✅
+     <td>❌
+    <tr>
+     <td>("<code data-x="">https</code>", "<code data-x="">example.org</code>", null, "<code data-x="">example.org</code>")
+     <td>("<code data-x="">http</code>", "<code data-x="">example.org</code>", null, "<code data-x="">example.org</code>")
+     <td>❌
+     <td>❌
+   </table>

@@ -8,8 +8,9 @@ for await (const dirEntry of Deno.readDir("testcases/")) {
     Deno.test(dirEntry.name, async () => {
       const input = await Deno.readTextFile("testcases/" + dirEntry.name);
       const expected = await Deno.readTextFile("testcases/" + dirEntry.name.replace(".html", ".out.html"));
+      const actual = rewrapper(input, COLUMN_LENGTH_FOR_TESTING);
 
-      assertEquals(rewrapper(input, COLUMN_LENGTH_FOR_TESTING), expected);
+      assertEquals(actual, expected);
     });
   }
 }
