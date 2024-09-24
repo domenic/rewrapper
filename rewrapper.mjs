@@ -50,7 +50,7 @@ function wrapLine(line, columnLength) {
   let currentLine = leadingIndent;
   let spaceBefore = "";
   for (const word of line.split(" ")) {
-    if (currentLine.length + spaceBefore.length + word.length < columnLength) {
+    if (currentLine.length + spaceBefore.length + word.length <= columnLength) {
       currentLine += spaceBefore + word;
     } else {
       if (currentLine !== leadingIndent)
