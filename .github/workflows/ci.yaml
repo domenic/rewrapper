@@ -1,16 +1,23 @@
 name: CI
+
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   Test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: denoland/setup-deno@v1
       with:
         deno-version: v1.x
@@ -19,12 +26,17 @@ jobs:
   Deploy:
     needs: Test
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     steps:
-    - uses: actions/checkout@v3
-    - name: Push to gh-pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: "."
-        exclude_assets: ".github,testcases,.editorconfig,*.md,*.test.mjs"
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - run: |
+          mkdir www
+          cp ./{index.html,rewrapper.mjs,script.mjs,style.css} www
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'www'
+      - id: deployment
+        uses: actions/deploy-pages@v4
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
